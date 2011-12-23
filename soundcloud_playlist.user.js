@@ -10,6 +10,8 @@
   Add to playlist hovering element created every time
 */
 
+window.sc_playlists_api_key = 'ab469e781d7eaf597f9b5186363f4219';
+
 if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
   (function page_scope_runner() {
     // If we're _not_ already running in the page, grab the full source
@@ -161,7 +163,7 @@ function generate_player(position, track_id, duration, waveform, user_name, user
                 </div>\
               </div>\
             </div>\
-            <script type="text/javascript">window.SC.bufferTracks.push({"id":' +track_id+ ',"uid":"quAAc6YoDDSV","user":{"username":"' +user_name+ '","permalink":"' +user_permalink+ '"},"uri":"' +track_permalink_url+ '","duration":' +duration+ ',"token":"v3Pvn","name":"ockeghem","title":"Ockeghem","commentable":true,"revealComments":false,"commentUri":"' +track_permalink_url+ '/comments/","streamUrl":"' +stream_url+ '?client_id=htuiRd1JP11Ww0X72T1C3g","waveformUrl":"' +waveform+ '","propertiesUri":"' +track_permalink_url+ '/properties/","statusUri":"/transcodings/quAAc6YoDDSV","replacingUid":null,"preprocessingReady":true,"renderingFailed":false,"isPublic":true,"commentableByUser":true,"makeHeardUri":false,"favorite":false,"followingTrackOwner":false,"conversations":{}});</script>\
+            <script type="text/javascript">window.SC.bufferTracks.push({"id":' +track_id+ ',"uid":"quAAc6YoDDSV","user":{"username":"' +user_name+ '","permalink":"' +user_permalink+ '"},"uri":"' +track_permalink_url+ '","duration":' +duration+ ',"token":"v3Pvn","name":"ockeghem","title":"Ockeghem","commentable":true,"revealComments":false,"commentUri":"' +track_permalink_url+ '/comments/","streamUrl":"' +stream_url+ '?client_id=' +window.sc_playlists_api_key+ '","waveformUrl":"' +waveform+ '","propertiesUri":"' +track_permalink_url+ '/properties/","statusUri":"/transcodings/quAAc6YoDDSV","replacingUid":null,"preprocessingReady":true,"renderingFailed":false,"isPublic":true,"commentableByUser":true,"makeHeardUri":false,"favorite":false,"followingTrackOwner":false,"conversations":{}});</script>\
           </div>\
         </li>';
 }
@@ -187,9 +189,7 @@ function generate_track(position, track_id, track_name, user_name, permalink_url
 }
 
 function generate_track_widget_from_id(id, position, playlist, player, track) {
-  var api_key = 'htuiRd1JP11Ww0X72T1C3g';
-  
-  $.getJSON('http://api.soundcloud.com/tracks/' +id+ '.json?client_id=' + api_key, function(r) {
+  $.getJSON('http://api.soundcloud.com/tracks/' +id+ '.json?client_id=' + window.sc_playlists_api_key, function(r) {
     var player_parent = player.parent();
     player.replaceWith(generate_player(position, r['id'], r['duration'], r['waveform_url'], r['user']['username'], r['user']['permalink'], r['permalink_url'], r['title'], r['stream_url']));
     var track_parent = track.parent();
