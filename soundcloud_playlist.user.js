@@ -54,7 +54,13 @@ function SCPlaylists() {
 
   var initialize_ui = function() {
     insert_playlists_button();
+    setup_add_to_playlist_ui();
+
     insert_add_to_playlist_ui();
+
+    $(document).bind('onContentLoaded', function(){
+      insert_add_to_playlist_ui();
+    });
   }
 
   var insert_playlists_button = function() {
@@ -264,23 +270,8 @@ function SCPlaylists() {
     });
   }
 
-  var insert_add_to_playlist_ui = function() {
-    $('.player .actionbar .actions .primary').append(
-      '<a class = "add-to-playlist-options pl-button " style="background: none; padding-left:8px;"><span>Add to playlist</span></a>'
-    );
-
-    var add_to_playlist_options = '<div class="add-to-playlist-options action-overlay pulldown">'
-                                  + '<div class="action-overlay-inner">'
-                                  + '<form class = "add-to-playlist"><select style = "display: inline; margin-right: 10px; margin-bottom: 0;">';
-    var playlists = $.parseJSON(localStorage.getItem('playlists'));
-    for (var p in playlists) {
-      add_to_playlist_options += '<option value="' +playlists[p]['id']+ '">' +playlists[p]['name']+ '</option>';
-    }
-    add_to_playlist_options += '</select><input type = "submit" value = "Add" style = "display: inline; margin-bottom: 0;"></form></div></div>';
-    $('.player .actionbar .actions').append(add_to_playlist_options);
-        
-
-    $('form.add-to-playlist input:submit').click(function() {
+  var setup_add_to_playlist_ui = function() {
+    $('form.add-to-playlist input:submit').live('click', function() {
       var playlist_id = $('select', $(this).closest('form')).val();
       var sc_track_id = $(this).closest('div.add-to-playlist-options').attr('data-sc-track');
       add_track_to_playlist(sc_track_id, playlist_id);
@@ -301,6 +292,25 @@ function SCPlaylists() {
       });
       return false;
     });
+  }
+
+  var insert_add_to_playlist_ui = function() {
+    var players = $('.player .actionbar .actions:not(.atp)')
+    $('.primary', players).append(
+      '<a class = "add-to-playlist-options pl-button " style="background: none; padding-left:8px;"><span>Add to playlist</span></a>'
+    );
+
+    var add_to_playlist_options = '<div class="add-to-playlist-options action-overlay pulldown">'
+                                  + '<div class="action-overlay-inner">'
+                                  + '<form class = "add-to-playlist"><select style = "display: inline; margin-right: 10px; margin-bottom: 0;">';
+    var playlists = $.parseJSON(localStorage.getItem('playlists'));
+    for (var p in playlists) {
+      add_to_playlist_options += '<option value="' +playlists[p]['id']+ '">' +playlists[p]['name']+ '</option>';
+    }
+    add_to_playlist_options += '</select><input type = "submit" value = "Add" style = "display: inline; margin-bottom: 0;"></form></div></div>';
+
+    players.append(add_to_playlist_options);
+    players.addClass('atp');
   }
 
   var get_playing_track = function() {
