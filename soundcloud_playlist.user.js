@@ -110,7 +110,11 @@ function SCPlaylists() {
                      + '<ul id = "playlists-list" class = "sets-list"></ul>'
                      + '</div>'
                      + '</div>'
-                     + '<div id = "main-content"><div id="main-content-inner"><ul id = "playlists_main"></ul></div></div>');
+                     + '<div id = "main-content"><div id="main-content-inner">'
+                     + '<div class="announcement important"><h3><strong>Please remember that this playlist functionality is provided by a 3rd party browser extension</strong></h3>'
+                     + '<p>SoundCloud can\'t provide support. If you\'re having any trouble with SoundCloud, try to disable this extension first. '
+                     + 'For help, go to the <a href = "https://github.com/lgeek/Soundcloud-playlists">project\'s page</a>.</p></div>'
+                     + '<ul id = "playlists_main"></ul></div></div>');
 
     $('#create_new_playlist').submit(function() {
       var playlist_name = $('#new_playlist_name').val();
