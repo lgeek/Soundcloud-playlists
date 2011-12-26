@@ -79,7 +79,7 @@ function SCPlaylists() {
     });
 
     $('#playlists-button').click(function() {
-      window.soundManager.stopAll();
+      $.audioEngine.stop()
       show_playlists_page();
     });
   }
