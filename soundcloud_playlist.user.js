@@ -390,18 +390,25 @@ function SCPlaylists() {
     $(window).bind('storage', function(e) {
       var event = e.originalEvent;
 
-      var playlist_id = event.key.replace('playlist_', '');
-      var playlist = $('li.set#' + event.key);
-      var new_value = $.parseJSON(event.newValue);
-      var old_value = $.parseJSON(event.oldValue);
+      // A playlist has been modified
+      if (event.key.match('playlist_')) {
+        var playlist_id = event.key.replace('playlist_', '');
+        var playlist = $('li.set#' + event.key);
 
-      if (new_value.length > old_value.length) {
-        var players = $('ol.players', playlist);
-        var tracks = $('ol.tracks', playlist);
-        players.append('<li></li>');
-        tracks.append('<li></li>');
+        // A playlist has been edited, not created or removed
+        if (event.newValue && event.oldValue) {
+          var new_value = $.parseJSON(event.newValue);
+          var old_value = $.parseJSON(event.oldValue);
 
-        generate_track_widget_from_id(new_value[new_value.length-1], players[0].childElementCount-1, playlist_id, $('li:last', players), $('li:last', tracks));
+          if (new_value.length > old_value.length) {
+            var players = $('ol.players', playlist);
+            var tracks = $('ol.tracks', playlist);
+            players.append('<li></li>');
+            tracks.append('<li></li>');
+
+            generate_track_widget_from_id(new_value[new_value.length-1], players[0].childElementCount-1, playlist_id, $('li:last', players), $('li:last', tracks));
+          }
+        }
       }
     });
   }
