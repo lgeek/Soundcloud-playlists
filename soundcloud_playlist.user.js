@@ -81,6 +81,8 @@ function SCPlaylists() {
     $('#playlists-button').click(function() {
       $.audioEngine.stop()
       show_playlists_page();
+      
+      setup_storage_updates_handler();
     });
   }
 
@@ -382,6 +384,26 @@ function SCPlaylists() {
 
     localStorage.setItem('playlists', JSON.stringify(new_playlists));
     localStorage.removeItem('playlist_'+playlist_id);
+  }
+
+  var setup_storage_updates_handler = function() {
+    $(window).bind('storage', function(e) {
+      var event = e.originalEvent;
+
+      var playlist_id = event.key.replace('playlist_', '');
+      var playlist = $('li.set#' + event.key);
+      var new_value = $.parseJSON(event.newValue);
+      var old_value = $.parseJSON(event.oldValue);
+
+      if (new_value.length > old_value.length) {
+        var players = $('ol.players', playlist);
+        var tracks = $('ol.tracks', playlist);
+        players.append('<li></li>');
+        tracks.append('<li></li>');
+
+        generate_track_widget_from_id(new_value[new_value.length-1], players[0].childElementCount-1, playlist_id, $('li:last', players), $('li:last', tracks));
+      }
+    });
   }
 
   var api_key = 'ab469e781d7eaf597f9b5186363f4219';
